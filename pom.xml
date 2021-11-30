@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.heronarts</groupId>
-    <artifactId>p3lx</artifactId>
-    <version>0.2.3</version>
+    <artifactId>p4lx</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
-	<name>P3LX</name>
+	<name>P4LX</name>
 	<description>Libraries for real-time procedural 3-D lighting animation and control.</description>
 	<url>http://lx.studio</url>
 	
@@ -28,9 +28,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/heronarts/P3LX.git</connection>
-		<developerConnection>scm:git:git://github.com/heronarts/P3LX.git</developerConnection>
-		<url>http://github.com/heronarts/P3LX/tree/master</url>
+		<connection>scm:git:git://github.com/heronarts/P4LX.git</connection>
+		<developerConnection>scm:git:git://github.com/heronarts/P4LX.git</developerConnection>
+		<url>http://github.com/heronarts/P4LX/tree/master</url>
 	</scm>
 
 	<distributionManagement>
@@ -45,8 +45,7 @@
 	</distributionManagement>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -66,19 +65,26 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jogamp.jogl</groupId>
-            <artifactId>jogl-all</artifactId>
-            <version>2.3.2</version>
+            <groupId>org.processing</groupId>
+            <artifactId>core</artifactId>
+            <version>4.0b2</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.processing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.5.4</version>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>2.4.0-rc-20210111</version>
             <scope>provided</scope>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>2.4.0-rc-20210111</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -87,24 +93,86 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
                 <version>2.5.1</version>
-                <configuration>
-                    <groupId>org.processing</groupId>
-                    <artifactId>core</artifactId>
-                    <version>3.5.4</version>
-                    <packaging>jar</packaging>
-                    <file>${basedir}/classpath/core-3.5.4.jar</file>
-                    <generatePom>true</generatePom>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>install-jar-lib</id>
+                        <id>install-processing-core</id>
+                        <configuration>
+                            <groupId>org.processing</groupId>
+                            <artifactId>core</artifactId>
+                            <version>4.0b2</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/core-4.0b2.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-2.4.0-rc-20210111.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-native</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-macosx-universal</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-macosx-universal.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-native</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-macosx-universal</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-macosx-universal.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
                         <goals>
                             <goal>install-file</goal>
                         </goals>
                         <phase>validate</phase>
                     </execution>
                 </executions>
-            </plugin>        
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -130,12 +198,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <bottom>P3LX library by Mark C. Slee. &#169; 2012-2021</bottom>
+                    <bottom>P4LX library by Mark C. Slee. &#169; 2012-2021</bottom>
                     <verbose>false</verbose>
                     <stylesheetfile>build/stylesheet.css</stylesheetfile>
-                    <doctitle>P3LX API Specification</doctitle>
+                    <doctitle>P4LX API Specification</doctitle>
                     <version>false</version>
-                    <windowtitle>P3LX API</windowtitle>
+                    <windowtitle>P4LX API</windowtitle>
                 </configuration>
             </plugin>
 
