@@ -4,20 +4,20 @@ Please note that LX is not open-source software. The license grants permission t
 
 ---
 
-### P3LX Overview ###
+### P4LX Overview ###
 
-P3LX is a Processing 3 wrapper library for the [LX](https://github.com/heronarts/LX) lighting engine and the basis of the [LX Studio](http://lx.studio/) application. It allows you to simply embed LX inside a Processing sketch with a rich UI library that makes it easy and painless to render 3D simulations alongside versatile 2D controls.
+P4LX is a Processing 4 wrapper library for the [LX](https://github.com/heronarts/LX) lighting engine and the basis of the [LX Studio](http://lx.studio/) application. It allows you to simply embed LX inside a Processing sketch with a rich UI library that makes it easy and painless to render 3D simulations alongside versatile 2D controls.
 
-Directly working with the P3LX library is only recommended for advanced users of LX. The easiest way to start an LX project is to clone or fork the [LXStudio](https://github.com/heronarts/LXStudio) repository and use that as the basis for your project.
+Directly working with the P4LX library is only recommended for advanced users of LX. The easiest way to start an LX project is to clone or fork the [LXStudio](https://github.com/heronarts/LXStudio) repository and use that as the basis for your project.
 
 ### Development Environment ###
 
-The recommended IDE for LX is Eclipse, using `mvn` for command-line build. Create a folder to work in and clone both the LX and P3LX repositories side-by-side.
+The recommended IDE for LX is Eclipse, using `mvn` for command-line build. Create a folder to work in and clone both the LX and P4LX repositories side-by-side.
 ```
 $ mkdir workspace
 $ cd workspace
 $ git clone https://github.com/heronarts/LX.git
-$ git clone https://github.com/heronarts/P3LX.git
+$ git clone https://github.com/heronarts/P4LX.git
 ```
 
 To open the project in Eclipse:
@@ -27,27 +27,27 @@ General > Existing Projects Into Workspace
 Select root directory...
 ```
 
-Go through this process for both the LX and P3LX projects, selecting `workspace/LX` and `workspace/P3LX` as the root directories.
+Go through this process for both the LX and P4LX projects, selecting `workspace/LX` and `workspace/P4LX` as the root directories.
 
 #### Maven Build Process ####
 
 First: Install Maven for your platform. Google is your friend.
 
-P3LX depends upon the Processing core library JAR file, which is not available in Maven central. First, you will need to install this to your local Maven repository using the `mvn validate` command. 
+P4LX depends upon the Processing core library JAR file, which is not available in Maven central. First, you will need to install this to your local Maven repository using the `mvn validate` command. 
 ```
-$ cd P3LX
+$ cd P4LX
 # mvn validate
 ```
 
-Once you have done this, you can build and install both the LX and P3LX packages
+Once you have done this, you can build and install both the LX and P4LX packages
 ```
 $ cd ../LX
 $ mvn install
-$ cd ../P3LX
+$ cd ../P4LX
 $ mvn install
 ```
 The above commands result in the following artifacts:
-in `P3LX/target`:
+in `P4LX/target`:
 1. fat jar with dependencies
 1. thin jar for distribution via maven repository publishing
 1. source jar for distribution via maven repository publishing
@@ -61,7 +61,7 @@ The Maven build is IDE-agnostic, so any IDE that can import Maven projects (Ecli
 Deployment requires access to the central Sonatype repository and appropriate GPG keys.
 
 ```
-$ cd P3LX
+$ cd P4LX
 $ mvn deploy -Pdeploy
 ```
 
