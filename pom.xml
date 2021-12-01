@@ -125,7 +125,71 @@
                         <phase>validate</phase>
                     </execution>
                     <execution>
-                        <id>install-jogl-all-native</id>
+                        <id>install-jogl-all-natives-linux-aarch64</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-linux-aarch64</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-linux-aarch64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-linux-amd64</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-linux-amd64</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-linux-amd64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-linux-armv6hf</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-linux-armv6hf</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-linux-armv6hf.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-linux-i586</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-linux-i586</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-linux-i586.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-macosx-universal</id>
                         <configuration>
                             <groupId>org.jogamp.jogl</groupId>
                             <artifactId>jogl-all</artifactId>
@@ -133,6 +197,38 @@
                             <version>2.4.0-rc-20210111</version>
                             <packaging>jar</packaging>
                             <file>${basedir}/classpath/jogl-all-natives-macosx-universal.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-windows-amd64</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-windows-amd64</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-windows-amd64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-jogl-all-natives-windows-i586</id>
+                        <configuration>
+                            <groupId>org.jogamp.jogl</groupId>
+                            <artifactId>jogl-all</artifactId>
+                            <classifier>natives-windows-i586</classifier>
+                            <version>2.4.0-rc-20210111</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/jogl-all-natives-windows-i586.jar</file>
                             <generatePom>true</generatePom>
                         </configuration>
                         <goals>
@@ -156,7 +252,71 @@
                         <phase>validate</phase>
                     </execution>
                     <execution>
-                        <id>install-gluegen-rt-native</id>
+                        <id>install-gluegen-rt-natives-linux-aarch64</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-linux-aarch64</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-linux-aarch64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-linux-amd64</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-linux-amd64</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-linux-amd64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-linux-armv6hf</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-linux-armv6hf</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-linux-armv6hf.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-linux-i586</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-linux-i586</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-linux-i586.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-macosx-universal</id>
                         <configuration>
                             <groupId>org.jogamp.gluegen</groupId>
                             <artifactId>gluegen-rt-main</artifactId>
@@ -164,6 +324,38 @@
                             <classifier>natives-macosx-universal</classifier>
                             <packaging>jar</packaging>
                             <file>${basedir}/classpath/gluegen-rt-natives-macosx-universal.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-windows-amd64</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-windows-amd64</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-windows-amd64.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                    <execution>
+                        <id>install-gluegen-rt-natives-windows-i586</id>
+                        <configuration>
+                            <groupId>org.jogamp.gluegen</groupId>
+                            <artifactId>gluegen-rt-main</artifactId>
+                            <version>2.4.0-rc-20210111</version>
+                            <classifier>natives-windows-i586</classifier>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/classpath/gluegen-rt-natives-windows-i586.jar</file>
                             <generatePom>true</generatePom>
                         </configuration>
                         <goals>
