@@ -100,6 +100,15 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
       }
       return super.getControlTarget();
     }
+
+    @Override
+    protected BooleanParameter getTriggerParameter() {
+      if (this.triggerable && (this.controlTarget instanceof BooleanParameter)) {
+        return (BooleanParameter) this.controlTarget;
+      }
+      return super.getTriggerParameter();
+    }
+
   }
 
   protected boolean active = false;
@@ -114,7 +123,7 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
   private PImage activeIcon = null;
   private PImage inactiveIcon = null;
 
-  private boolean triggerable = false;
+  protected boolean triggerable = false;
   protected boolean enabled = true;
 
   protected boolean momentaryPressValid = false;
@@ -544,7 +553,7 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
     return this.triggerable ? getTriggerParameter() : null;
   }
 
-  private BooleanParameter getTriggerParameter() {
+  protected BooleanParameter getTriggerParameter() {
     if (this.booleanParameter != null && this.booleanParameter.isMappable() && this.booleanParameter.getParent() != null) {
       return this.booleanParameter;
     }
