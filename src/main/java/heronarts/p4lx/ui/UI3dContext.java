@@ -513,8 +513,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     if (this.pg == null) {
       throw new UnsupportedOperationException("Cannot resize UI3dContext created with no size.");
     } else {
-      this.pg.dispose();
-      this.pg = this.ui.applet.createGraphics((int) width, (int) height, PConstants.P3D);
+      this.pg.setSize((int) width, (int) height);
       onResize();
     }
     return this;
