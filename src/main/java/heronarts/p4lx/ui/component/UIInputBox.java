@@ -28,6 +28,7 @@ import heronarts.lx.command.LXCommand;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.p4lx.ui.UI;
 import heronarts.p4lx.ui.UIFocus;
+import heronarts.p4lx.ui.UIKeyEvent;
 import heronarts.p4lx.ui.UITimerTask;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -315,7 +316,7 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
         }
       } else if (this.enabled) {
         // Not editing
-        if (this.immediateEdit && isValidCharacter(keyChar)) {
+        if (this.immediateEdit && isValidCharacter(keyChar) && !UIKeyEvent.isCommand(keyEvent)) {
           consumeKeyEvent();
           this.editing = true;
           this.editBuffer = Character.toString(keyChar);
