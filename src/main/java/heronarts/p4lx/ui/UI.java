@@ -492,6 +492,12 @@ public class UI implements LXEngine.Dispatch {
       });
     }
 
+    lx.statusMessage.addListener((p) -> {
+      if (!isMapping()) {
+        contextualHelpText.setValue(lx.statusMessage.getString());
+      }
+    });
+
     lx.errorChanged.addListener((p) -> { showError(); });
     showError();
 
