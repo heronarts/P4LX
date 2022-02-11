@@ -181,7 +181,7 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
 
   @Override
   protected boolean isValidCharacter(char keyChar) {
-    return (keyChar >= '0' && keyChar <= '9');
+    return (keyChar >= '0' && keyChar <= '9') || (keyChar == '-');
   }
 
   private int getIncrement(Event inputEvent) {
