@@ -181,7 +181,6 @@ public class UIDynamicColorPicker extends UIColorPicker implements UIFocus {
 
       @Override
       public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        consumeMousePress();
         focusColor(this.color);
         super.onMousePressed(mouseEvent, mx, my);
       }
