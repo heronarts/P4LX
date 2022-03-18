@@ -238,6 +238,13 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     return "-";
   }
 
+  protected boolean isWrappable() {
+    if (this.parameter != null) {
+      return this.parameter.isWrappable();
+    }
+    return false;
+  }
+
   @Override
   protected boolean isValidCharacter(char keyChar) {
     return UIDoubleBox.isValidInputCharacter(keyChar);
@@ -332,13 +339,18 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
           dp.decrement(keyEvent.isShiftDown() ? dp.getRange() / 10 : 1);
         }
       } else if (this.parameter instanceof BooleanParameter) {
+        boolean value = isWrappable() ? !((BooleanParameter)this.parameter).isOn() : false;
         if (this.useCommandEngine) {
-          getLX().command.perform(new LXCommand.Parameter.SetNormalized((BooleanParameter) this.parameter, false));
+          getLX().command.perform(new LXCommand.Parameter.SetNormalized((BooleanParameter) this.parameter, value));
         } else {
-          ((BooleanParameter) this.parameter).setValue(false);
+          ((BooleanParameter) this.parameter).setValue(value);
         }
       } else {
-        setNormalized(getNormalized() - getIncrement(keyEvent));
+        double value = getNormalized() - getIncrement(keyEvent);
+        if (isWrappable() && value < 0) {
+          value = 1 + (value % 1.);
+        }
+        setNormalized(value);
       }
     }
   }
@@ -361,13 +373,18 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
           dp.increment(keyEvent.isShiftDown() ? dp.getRange() / 10 : 1);
         }
       } else if (this.parameter instanceof BooleanParameter) {
+        boolean value = isWrappable() ? !((BooleanParameter)this.parameter).isOn() : true;
         if (this.useCommandEngine) {
-          getLX().command.perform(new LXCommand.Parameter.SetNormalized((BooleanParameter) this.parameter, true));
+          getLX().command.perform(new LXCommand.Parameter.SetNormalized((BooleanParameter) this.parameter, value));
         } else {
-          ((BooleanParameter) this.parameter).setValue(true);
+          ((BooleanParameter) this.parameter).setValue(value);
         }
       } else {
-        setNormalized(getNormalized() + getIncrement(keyEvent));
+        double value = getNormalized() + getIncrement(keyEvent);
+        if (isWrappable() && value > 1) {
+          value = value % 1.;
+        }
+        setNormalized(value);
       }
     }
   }

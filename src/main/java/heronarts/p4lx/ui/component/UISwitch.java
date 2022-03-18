@@ -45,6 +45,7 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
 
   public UISwitch(float x, float y) {
     super(x, y, WIDTH, SWITCH_SIZE);
+    this.keyEditable = true;
   }
 
   public UISwitch setMomentary(boolean momentary) {
