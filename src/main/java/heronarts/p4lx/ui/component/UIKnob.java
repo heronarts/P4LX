@@ -241,7 +241,16 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
       if (mouseEvent.isShiftDown()) {
         delta /= 10;
       }
-      this.dragValue = LXUtils.constrain(this.dragValue - delta, 0, 1);
+      this.dragValue -= delta;
+      if (isWrappable()) {
+        if (this.dragValue < 0) {
+          this.dragValue = 1 + (this.dragValue % 1.);
+        } else if (this.dragValue > 1) {
+          this.dragValue = this.dragValue % 1.;
+        }
+      } else {
+        this.dragValue = LXUtils.constrain(this.dragValue, 0, 1);
+      }
       setNormalized(this.dragValue);
     }
   }
