@@ -1193,17 +1193,17 @@ public abstract class UI2dComponent extends UIObject {
     pg.stroke(color);
     pg.noFill();
     // Top left
-    pg.line(x, y, x + focusSize, y);
-    pg.line(x, y, x, y + focusSize);
+    pg.line(x + .5f, y + .5f, x + .5f + focusSize, y + .5f);
+    pg.line(x + .5f, y + .5f, x + .5f, y + .5f + focusSize);
     // Top right
-    pg.line(x + width - focusSize - 1, y, x + width - 1, y);
-    pg.line(x + width - 1, y, x + width - 1, y + focusSize);
-    // Bottom right
-    pg.line(x + width - focusSize - 1, y + height - 1, x + width - 1, y + height - 1);
-    pg.line(x + width - 1, y + height - 1, x + width - 1, y + height - 1 - focusSize);
+    pg.line(x + width - 1.5f - focusSize, y + .5f, x + width - 1.5f, y + .5f);
+    pg.line(x + width - 1.5f, y + .5f, x + width - 1.5f, y + focusSize + .5f);
     // Bottom left
-    pg.line(x, y + height - 1, x + focusSize, y + height - 1);
-    pg.line(x, y + height - 1, x, y + height - 1 - focusSize);
+    pg.line(x + .5f, y + height - 1.5f, x + .5f + focusSize, y + height - 1.5f);
+    pg.line(x + .5f, y + height - 1.5f, x + .5f, y + height - 1.5f - focusSize);
+    // Bottom right
+    pg.line(x + width - focusSize - 1.5f, y + height - 1.5f, x + width - 1.5f, y + height - 1.5f);
+    pg.line(x + width - 1.5f, y + height - 1.5f, x + width - 1.5f, y + height - 1.5f - focusSize);
   }
 
 }
