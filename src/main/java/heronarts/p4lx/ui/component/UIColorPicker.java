@@ -24,6 +24,7 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LinkedColorParameter;
 import heronarts.lx.command.LXCommand;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.utils.LXUtils;
@@ -50,6 +51,10 @@ public class UIColorPicker extends UI2dComponent {
 
   private boolean enabled = true;
 
+  private int drawColor = 0xff000000;
+
+  private boolean deviceMode = false;
+
   public UIColorPicker(ColorParameter color) {
     this(UIKnob.WIDTH, UIKnob.WIDTH, color);
   }
@@ -62,10 +67,8 @@ public class UIColorPicker extends UI2dComponent {
     this(x, y, w, h, color, false);
   }
 
-  public UIColorPicker(float x, float y, float w, float h, ColorParameter color, boolean isDynamic) {
+  protected UIColorPicker(float x, float y, float w, float h, ColorParameter color, boolean isDynamic) {
     super(x, y, w, h);
-    setBorderColor(UI.get().theme.getControlBorderColor());
-    setBackgroundColor(color.getColor());
     setColor(color);
 
     // Redraw with color in real-time, if modulated
@@ -74,18 +77,26 @@ public class UIColorPicker extends UI2dComponent {
       addLoopTask(new UITimerTask(30, UITimerTask.Mode.FPS) {
         @Override
         protected void run() {
-          setBackgroundColor(LXColor.hsb(
-            color.hue.getValuef(),
-            color.saturation.getValuef(),
-            color.brightness.getValuef()
-          ));
+          setDrawColor(color.calcColor());
         }
       });
     }
   }
 
+  protected void setDrawColor(int drawColor) {
+    if (this.drawColor != drawColor) {
+      this.drawColor = drawColor;
+      redraw();
+    }
+  }
+
   public UIColorPicker setEnabled(boolean enabled) {
     this.enabled = enabled;
+    return this;
+  }
+
+  protected UIColorPicker setDeviceMode(boolean deviceMode) {
+    this.deviceMode = deviceMode;
     return this;
   }
 
@@ -96,7 +107,7 @@ public class UIColorPicker extends UI2dComponent {
   };
 
   protected UIColorOverlay buildColorOverlay(UI ui) {
-    return new UIColorOverlay();
+    return new UIColorOverlay(ui);
   }
 
   public UIColorPicker setCorner(Corner corner) {
@@ -112,6 +123,20 @@ public class UIColorPicker extends UI2dComponent {
     if (color != null) {
       color.addListener(this.redrawSwatch);
       redrawSwatch.onParameterChanged(color);
+    } else {
+      setDrawColor(LXColor.BLACK);
+    }
+  }
+
+  @Override
+  public void onDraw(UI ui, PGraphics pg) {
+    pg.stroke(ui.theme.getControlBorderColor());
+    pg.fill(this.drawColor);
+    if (this.deviceMode) {
+      pg.rect(UIKnob.KNOB_MARGIN, 0, UIKnob.KNOB_SIZE, UIKnob.KNOB_SIZE);
+      UIParameterControl.drawParameterLabel(ui, pg, this, (this.color != null) ? this.color.getLabel() : "-");
+    } else {
+      pg.rect(0, 0, this.width, this.height);
     }
   }
 
@@ -173,11 +198,11 @@ public class UIColorPicker extends UI2dComponent {
 
     private final UISwatch swatch;
 
-    UIColorOverlay() {
-      this(8);
+    UIColorOverlay(UI ui) {
+      this(ui, color instanceof LinkedColorParameter ? 38 : 8);
     }
 
-    UIColorOverlay(float extraHeight) {
+    UIColorOverlay(UI ui, float extraHeight) {
       super(0, 0, 240, UISwatch.HEIGHT + extraHeight);
 
       setBackgroundColor(UI.get().theme.getDeviceBackgroundColor());
@@ -189,18 +214,46 @@ public class UIColorPicker extends UI2dComponent {
 
       float xp = this.swatch.getX() + this.swatch.getWidth();
       float yp = 16;
-      new UIDoubleBox(xp, yp, 56, color.hue).addToContainer(this);
+      final UIDoubleBox hueBox = (UIDoubleBox) new UIDoubleBox(xp, yp, 56, color.hue).addToContainer(this);
       new UILabel(xp, yp + 16, 56, "Hue").setTextAlignment(PConstants.CENTER).addToContainer(this);
 
       yp += 40;
 
-      new UIDoubleBox(xp, yp, 56, color.saturation).addToContainer(this);
+      final UIDoubleBox satBox = (UIDoubleBox) new UIDoubleBox(xp, yp, 56, color.saturation).addToContainer(this);
       new UILabel(xp, yp + 16, 56, "Sat").setTextAlignment(PConstants.CENTER).addToContainer(this);
 
       yp += 40;
 
-      new UIDoubleBox(xp, yp, 56, color.brightness).addToContainer(this);
+      final UIDoubleBox brtBox = (UIDoubleBox) new UIDoubleBox(xp, yp, 56, color.brightness).addToContainer(this);
       new UILabel(xp, yp + 16, 56, "Bright").setTextAlignment(PConstants.CENTER).addToContainer(this);
+
+      if (color instanceof LinkedColorParameter) {
+        LinkedColorParameter linkedColor = (LinkedColorParameter) color;
+
+        // Horizontal break
+        new UI2dComponent(12, 140, 220, 1) {}
+        .setBorderColor(ui.theme.getDarkBackgroundColor())
+        .addToContainer(this);
+
+        final UIIntegerBox indexBox = new UIIntegerBox(20, 16, linkedColor.index);
+
+        UI2dContainer.newHorizontalContainer(16, 4,
+          new UIButton(64, 16, linkedColor.mode),
+          new UILabel(28, 12, "Index").setFont(ui.theme.getControlFont()),
+          indexBox
+        )
+        .setPosition(12, 148)
+        .addToContainer(this);
+
+        linkedColor.mode.addListener((p) -> {
+          boolean isLinked = linkedColor.mode.getEnum() == LinkedColorParameter.Mode.PALETTE;
+          swatch.setEnabled(!isLinked);
+          hueBox.setEnabled(!isLinked);
+          satBox.setEnabled(!isLinked);
+          brtBox.setEnabled(!isLinked);
+          indexBox.setEnabled(isLinked);
+        }, true);
+      }
 
     }
 
@@ -222,10 +275,16 @@ public class UIColorPicker extends UI2dComponent {
       private static final float WIDTH = BRIGHT_SLIDER_X + BRIGHT_SLIDER_WIDTH + 2*PADDING;
       private static final float HEIGHT = GRID_HEIGHT + 2*PADDING;
 
+      private boolean enabled = true;
+
       public UISwatch() {
         super(4, 4, WIDTH, HEIGHT);
         color.addListener((p) -> { redraw(); });
         setFocusCorners(false);
+      }
+
+      private void setEnabled(boolean enabled) {
+        this.enabled = enabled;
       }
 
       @Override
@@ -287,6 +346,10 @@ public class UIColorPicker extends UI2dComponent {
 
       @Override
       public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+        if (!this.enabled) {
+          return;
+        }
+
         this.setBrightness = null;
         this.setColor = null;
         if (this.draggingBrightness = (mx > GRID_X + GRID_WIDTH)) {
@@ -313,6 +376,9 @@ public class UIColorPicker extends UI2dComponent {
 
       @Override
       public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        if (!this.enabled) {
+          return;
+        }
         if (this.draggingBrightness) {
           if (dy != 0) {
             float brightness = color.brightness.getBaseValuef();
@@ -326,6 +392,9 @@ public class UIColorPicker extends UI2dComponent {
 
       @Override
       public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (!this.enabled) {
+          return;
+        }
         float inc = keyEvent.isShiftDown() ? 10 : 2;
         if (keyCode == java.awt.event.KeyEvent.VK_UP) {
           consumeKeyEvent();

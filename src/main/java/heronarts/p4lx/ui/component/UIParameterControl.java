@@ -40,6 +40,7 @@ import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p4lx.ui.UI;
+import heronarts.p4lx.ui.UI2dComponent;
 import heronarts.p4lx.ui.UIControlTarget;
 import heronarts.p4lx.ui.UICopy;
 import heronarts.p4lx.ui.UIKeyEvent;
@@ -299,6 +300,13 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     }
   }
 
+  public static void drawParameterLabel(UI ui, PGraphics pg, UI2dComponent component, String labelText) {
+    pg.fill(ui.theme.getControlTextColor());
+    pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
+    pg.textFont(ui.theme.getControlFont());
+    pg.text(clipTextToWidth(pg, labelText, component.getWidth() - TEXT_MARGIN), component.getWidth()/2, component.getHeight() - TEXT_MARGIN);
+  }
+
   private void drawLabel(UI ui, PGraphics pg) {
     if (this.editing) {
       pg.fill(ui.theme.getControlBackgroundColor());
@@ -310,10 +318,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
       pg.text(clipTextToWidth(pg, this.editBuffer, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
     } else {
       String labelText = this.showValue ? getValueString() : getLabelString();
-      pg.fill(ui.theme.getControlTextColor());
-      pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
-      pg.textFont(ui.theme.getControlFont());
-      pg.text(clipTextToWidth(pg, labelText, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
+      drawParameterLabel(ui, pg, this, labelText);
     }
   }
 
