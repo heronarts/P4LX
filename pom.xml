@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>4.0b2</version>
+            <version>4.0b7</version>
             <scope>provided</scope>
         </dependency>
 
@@ -99,9 +99,9 @@
                         <configuration>
                             <groupId>org.processing</groupId>
                             <artifactId>core</artifactId>
-                            <version>4.0b2</version>
+                            <version>4.0b7</version>
                             <packaging>jar</packaging>
-                            <file>${basedir}/classpath/core-4.0b2.jar</file>
+                            <file>${basedir}/classpath/core-4.0b7.jar</file>
                             <generatePom>true</generatePom>
                         </configuration>
                         <goals>
