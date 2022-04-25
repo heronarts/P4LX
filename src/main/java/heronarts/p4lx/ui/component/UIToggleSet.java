@@ -229,7 +229,7 @@ public class UIToggleSet extends UIParameterComponent implements UIFocus, UICont
         pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 2, this.height - 2);
       }
       pg.fill(isActive ? UI.WHITE : ui.theme.getControlTextColor());
-      pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, this.height/2);
+      pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, this.height/2 - 1);
       leftBoundary = this.boundaries[i];
     }
   }
