@@ -1126,8 +1126,9 @@ public abstract class UI2dComponent extends UIObject {
       while ((component != null) && (component instanceof UI2dComponent)) {
         UI2dComponent component2d = (UI2dComponent) component;
         if (component2d.hasBackground || (component2d.hasFocus && component2d.hasFocusBackground)) {
-          pg.noStroke();
-          pg.fill((component2d.hasFocus && component2d.hasFocusBackground) ? component2d.focusBackgroundColor : component2d.backgroundColor);
+          int fill = (component2d.hasFocus && component2d.hasFocusBackground) ? component2d.focusBackgroundColor : component2d.backgroundColor;
+          pg.stroke(fill);
+          pg.fill(fill);
           pg.rect(0, 0, this.width-1, this.height-1);
           break;
         }
@@ -1136,8 +1137,9 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     if (ownBackground) {
-      pg.noStroke();
-      pg.fill((this.hasFocus && this.hasFocusBackground) ? this.focusBackgroundColor : this.backgroundColor);
+      int fill = (this.hasFocus && this.hasFocusBackground) ? this.focusBackgroundColor : this.backgroundColor;
+      pg.stroke(fill);
+      pg.fill(fill);
       pg.rect(0, 0, this.width-1, this.height-1, this.borderRounding);
     }
 
