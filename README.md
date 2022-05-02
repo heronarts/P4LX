@@ -12,7 +12,7 @@ Directly working with the P4LX library is only recommended for advanced users of
 
 ### Development Environment ###
 
-At the time of writing, Processing 4.0 beta 8 uses the [Eclipse Temurin Java 17 JDK](https://adoptium.net/). Configure your development environment to use this JVM for greatest compatibility with the Processing 4 runtime.
+At the time of writing, Processing 4.0 beta 8 uses the [Eclipse Temurin Java 17 JDK (17.0.2+8)](https://adoptium.net/). Configure your development environment to use this JVM for greatest compatibility with the Processing 4 runtime.
 
 The recommended IDE for LX is Eclipse, using `mvn` for command-line build. Create a folder to work in and clone both the LX and P4LX repositories side-by-side.
 ```
