@@ -12,7 +12,7 @@ Directly working with the P4LX library is only recommended for advanced users of
 
 ### Development Environment ###
 
-At the time of writing, Processing 4 uses the [Eclipse Temurin Java 11 JDK](https://adoptium.net/?variant=openjdk11). It is highly recommended to install and configure your development environment to use this JVM for greatest compatibility with the Processing 4 runtime.
+At the time of writing, Processing 4.0 beta 8 uses the [Eclipse Temurin Java 17 JDK](https://adoptium.net/). Configure your development environment to use this JVM for greatest compatibility with the Processing 4 runtime.
 
 The recommended IDE for LX is Eclipse, using `mvn` for command-line build. Create a folder to work in and clone both the LX and P4LX repositories side-by-side.
 ```
@@ -35,11 +35,13 @@ Go through this process for both the LX and P4LX projects, selecting `workspace/
 
 First: Install Maven for your platform. Google is your friend.
 
-P4LX depends upon the Processing core library JAR file, as well as recent JOGL builds which are not available in Maven central. First, you will need to install these to your local Maven repository using the `mvn validate` command. 
+P4LX depends upon the Processing core library JAR file, as well as custom JOGL builds. These custom JOGL builds are not presently available in Maven central. First, you will need to install these to your local Maven repository using the `mvn validate` command. 
 ```
 $ cd P4LX
 # mvn validate
 ```
+
+This will locally install the JOGL dependencies with the artificial version identifier 4.0b8. The installed libraries are lifted directly from the distributable Processing application.
 
 Once you have done this, you can build and install both the LX and P4LX packages
 ```
