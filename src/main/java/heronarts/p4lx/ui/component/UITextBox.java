@@ -168,7 +168,12 @@ public class UITextBox extends UIInputBox implements UICopy, UIPaste {
   public void onPaste(LXClipboardItem item) {
     if (item instanceof LXTextValue) {
       if (isEnabled() && isEditable()) {
-        setValue(((LXTextValue) item).getValue());
+        if (this.editing) {
+          this.editBuffer = this.editBuffer + ((LXTextValue) item).getValue();
+          redraw();
+        } else {
+          setValue(((LXTextValue) item).getValue());
+        }
       }
     }
   }

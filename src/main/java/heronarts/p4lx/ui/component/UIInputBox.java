@@ -291,9 +291,11 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
       if (this.editing) {
         // Editing!
         if (isValidCharacter(keyChar)) {
-          consumeKeyEvent();
-          this.editBuffer += keyChar;
-          redraw();
+          if (!UIKeyEvent.isCommand(keyEvent)) {
+            consumeKeyEvent();
+            this.editBuffer += keyChar;
+            redraw();
+          }
         } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
           consumeKeyEvent();
           this.editing = false;
