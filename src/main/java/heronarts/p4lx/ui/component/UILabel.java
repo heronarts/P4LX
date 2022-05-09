@@ -176,7 +176,7 @@ public class UILabel extends UI2dComponent {
       ty = this.height - this.bottomPadding;
       break;
     case PConstants.CENTER:
-      ty = this.height / 2;
+      ty = this.height / 2 - 1;
       break;
     }
     String str;
