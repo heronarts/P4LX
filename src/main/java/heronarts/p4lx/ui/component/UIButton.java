@@ -123,6 +123,8 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
   private PImage activeIcon = null;
   private PImage inactiveIcon = null;
 
+  private int activeFontColor = UI.WHITE;
+
   protected boolean triggerable = false;
   protected boolean enabled = true;
 
@@ -177,6 +179,20 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
     setBorderColor(UI.get().theme.getControlBorderColor());
     setFontColor(UI.get().theme.getControlTextColor());
     setBackgroundColor(this.inactiveColor);
+  }
+
+  /**
+   * Sets the active font color
+   *
+   * @param activeFontColor color
+   * @return this
+   */
+  public UIButton setActiveFontColor(int activeFontColor) {
+    if (activeColor != this.activeFontColor) {
+      this.activeFontColor = activeFontColor;
+      redraw();
+    }
+    return this;
   }
 
   public UIButton setEnabled(boolean enabled) {
@@ -310,7 +326,7 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
     } else {
       String label = this.active ? this.activeLabel : this.inactiveLabel;
       if ((label != null) && (label.length() > 0)) {
-        pg.fill((this.active || this.momentaryPressEngaged) ? UI.WHITE : getFontColor());
+        pg.fill((this.active || this.momentaryPressEngaged) ? this.activeFontColor : getFontColor());
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         if (this.textAlignVertical == PConstants.CENTER) {
           pg.textAlign(PConstants.CENTER, PConstants.CENTER);
