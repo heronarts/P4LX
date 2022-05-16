@@ -379,10 +379,13 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
    * is a valid, selectable trigger target.
    */
   boolean isTriggerTargetMapping() {
-    return
-      this.ui.triggerTargetMapping &&
-      (this instanceof UITriggerTarget) &&
-      ((UITriggerTarget) this).getTriggerTarget() != null;
+    if (this.ui.triggerTargetMapping && (this instanceof UITriggerTarget)) {
+      BooleanParameter target = ((UITriggerTarget) this).getTriggerTarget();
+      return
+        (target != null) &&
+        !target.isDescendant(this.ui.getTriggerSource().getTriggerSource().getParent());
+    }
+    return false;
   }
 
   /**
@@ -641,7 +644,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         getUI().showContextOverlay(
           new UIContextMenu(mx, my, UIContextMenu.DEFAULT_WIDTH, 0)
           .setActions(contextActions.toArray(new UIContextActions.Action[0]))
-          .setPosition((UI2dComponent) this, mx, my)
+          .setPosition(this, mx, my)
         );
       }
     }

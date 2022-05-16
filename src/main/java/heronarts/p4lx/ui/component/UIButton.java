@@ -88,6 +88,7 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
 
   }
 
+  private LXParameter controlSource = null;
   private LXParameter controlTarget = null;
 
   protected boolean active = false;
@@ -525,6 +526,20 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
   }
 
   /**
+   * Sets an explicit control source for the button, which may or may not match
+   * its other parameter behavior. Useful for buttons that need to perform a
+   * custom LXCommand rather than explicitly change parameter value, but still
+   * should be mappable for modulation and MIDI.
+   *
+   * @param controlSource Control source
+   * @return this
+   */
+  public UIButton setControlSource(LXParameter controlSource) {
+    this.controlSource = controlSource;
+    return this;
+  }
+
+  /**
    * Sets an explicit control target for the button, which may or may not match
    * its other parameter behavior. Useful for buttons that need to perform a
    * custom LXCommand rather than explicitly change parameter value, but still
@@ -550,7 +565,7 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
           return this.enumParameter.isMappable() ? this.enumParameter : null;
         }
       } else {
-        return getTriggerParameter();
+        return getTriggerTargetParameter();
       }
     }
     return null;
@@ -558,15 +573,22 @@ public class UIButton extends UIParameterComponent implements UIControlTarget, U
 
   @Override
   public BooleanParameter getTriggerSource() {
-    return this.triggerable ? getTriggerParameter() : null;
+    return this.triggerable ? getTriggerSourceParameter() : null;
   }
 
   @Override
   public BooleanParameter getTriggerTarget() {
-    return this.triggerable ? getTriggerParameter() : null;
+    return this.triggerable ? getTriggerTargetParameter() : null;
   }
 
-  protected BooleanParameter getTriggerParameter() {
+  protected BooleanParameter getTriggerSourceParameter() {
+    if (this.controlSource instanceof BooleanParameter) {
+      return (BooleanParameter) this.controlSource;
+    }
+    return getTriggerTargetParameter();
+  }
+
+  protected BooleanParameter getTriggerTargetParameter() {
     if (this.controlTarget instanceof BooleanParameter) {
       return (BooleanParameter) this.controlTarget;
     }
