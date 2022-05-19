@@ -36,7 +36,6 @@ import heronarts.lx.modulation.LXModulationEngine;
 import heronarts.lx.modulation.LXParameterModulation;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p4lx.P4LX;
 import heronarts.p4lx.ui.component.UILabel;
@@ -447,35 +446,51 @@ public class UI implements LXEngine.Dispatch {
 
       lx.engine.setInputDispatch(this);
 
-      lx.engine.mapping.mode.addListener(new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-          midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
-          modulationSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE;
-          modulationTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_TARGET;
-          triggerSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_SOURCE;
-          triggerTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_TARGET;
+      lx.engine.mapping.mode.addListener((p) -> {
 
-          if (midiMapping) {
-            contextualHelpText.setValue("Click on a control target to MIDI map, eligible controls are highlighted");
-          } else if (modulationSourceMapping) {
-            contextualHelpText.setValue("Click on a modulation source, eligible sources are highlighted ");
-          } else if (modulationTargetMapping) {
-            LXNormalizedParameter sourceParameter = modulationSource.getModulationSource();
-            if (sourceParameter == null) {
-              contextualHelpText.setValue("You are somehow mapping a non-existent source parameter, choose a destination");
-            } else {
-              contextualHelpText.setValue("Select a modulation destination for " + sourceParameter.getCanonicalLabel() + ", eligible targets are highlighted");
-            }
-          } else if (triggerSourceMapping) {
-            contextualHelpText.setValue("Click on a trigger source, eligible sources are highlighted ");
-          } else if (triggerTargetMapping) {
-            contextualHelpText.setValue("Select a trigger destination for " + triggerSource.getTriggerSource().getCanonicalLabel() + ", eligible targets are highlighted");
-          } else {
-            contextualHelpText.setValue("");
-          }
+        LXMappingEngine.Mode mappingMode = lx.engine.mapping.getMode();
 
-          root.redraw();
+        boolean mappingOff = mappingMode == LXMappingEngine.Mode.OFF;
+        this.midiMapping = mappingMode == LXMappingEngine.Mode.MIDI;
+        this.modulationSourceMapping = mappingMode == LXMappingEngine.Mode.MODULATION_SOURCE;
+        this.modulationTargetMapping = mappingMode == LXMappingEngine.Mode.MODULATION_TARGET;
+        this.triggerSourceMapping = mappingMode == LXMappingEngine.Mode.TRIGGER_SOURCE;
+        this.triggerTargetMapping = mappingMode == LXMappingEngine.Mode.TRIGGER_TARGET;
+
+        // Clear mapping state when mapping is finished
+        if (mappingOff) {
+          this.modulationEngine = this.lx.engine.modulation;
+          this.controlTarget = null;
+          this.modulationSource = null;
+          this.triggerSource = null;
         }
+        if (this.triggerSourceMapping) {
+          this.triggerSource = null;
+        }
+        if (this.modulationSourceMapping) {
+          this.modulationSource = null;
+        }
+
+        if (this.midiMapping) {
+          this.contextualHelpText.setValue("Click on a control target to MIDI map, eligible controls are highlighted");
+        } else if (this.modulationSourceMapping) {
+          this.contextualHelpText.setValue("Click on a modulation source, eligible sources are highlighted ");
+        } else if (this.modulationTargetMapping) {
+          LXNormalizedParameter sourceParameter = modulationSource.getModulationSource();
+          if (sourceParameter == null) {
+            this.contextualHelpText.setValue("You are somehow mapping a non-existent source parameter, choose a destination");
+          } else {
+            this.contextualHelpText.setValue("Select a modulation destination for " + sourceParameter.getCanonicalLabel() + ", eligible targets are highlighted");
+          }
+        } else if (this.triggerSourceMapping) {
+          this.contextualHelpText.setValue("Click on a trigger source, eligible sources are highlighted ");
+        } else if (this.triggerTargetMapping) {
+          this.contextualHelpText.setValue("Select a trigger destination for " + triggerSource.getTriggerSource().getCanonicalLabel() + ", eligible targets are highlighted");
+        } else {
+          this.contextualHelpText.setValue("");
+        }
+
+        root.redraw();
       });
       lx.engine.midi.addMappingListener(new LXMidiEngine.MappingListener() {
 
@@ -634,15 +649,32 @@ public class UI implements LXEngine.Dispatch {
     return this.controlTarget;
   }
 
+  public UI mapModulationOff() {
+    this.lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+    return this;
+  }
+
+  public UI mapTriggerSource() {
+    return mapTriggerSource(this.lx.engine.modulation, null);
+  }
+
   public UI mapTriggerSource(UITriggerSource triggerSource) {
-    this.modulationEngine = this.lx.engine.modulation;
+    return mapTriggerSource(this.lx.engine.modulation, triggerSource);
+  }
+
+  public UI mapTriggerSource(LXModulationEngine modulationEngine, UITriggerSource triggerSource) {
+    this.modulationEngine = modulationEngine;
     this.triggerSource = triggerSource;
-    this.lx.engine.mapping.setMode(triggerSource == null ? LXMappingEngine.Mode.OFF : LXMappingEngine.Mode.TRIGGER_TARGET);
+    this.lx.engine.mapping.setMode(triggerSource == null ? LXMappingEngine.Mode.TRIGGER_SOURCE : LXMappingEngine.Mode.TRIGGER_TARGET);
     return this;
   }
 
   UITriggerSource getTriggerSource() {
     return this.triggerSource;
+  }
+
+  public UI mapModulationSource() {
+    return mapModulationSource(this.lx.engine.modulation, null);
   }
 
   public UI mapModulationSource(UIModulationSource modulationSource) {
@@ -652,7 +684,7 @@ public class UI implements LXEngine.Dispatch {
   public UI mapModulationSource(LXModulationEngine modulationEngine, UIModulationSource modulationSource) {
     this.modulationEngine = modulationEngine;
     this.modulationSource = modulationSource;
-    this.lx.engine.mapping.setMode(modulationSource == null ? LXMappingEngine.Mode.OFF : LXMappingEngine.Mode.MODULATION_TARGET);
+    this.lx.engine.mapping.setMode(modulationSource == null ? LXMappingEngine.Mode.MODULATION_SOURCE : LXMappingEngine.Mode.MODULATION_TARGET);
     return this;
   }
 
