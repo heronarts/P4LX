@@ -628,7 +628,7 @@ public interface UIItemList {
           if (item.isChecked()) {
             pg.noStroke();
             pg.fill(textColor);
-            pg.rect(textX+2, yp+6, CHECKBOX_SIZE/2, CHECKBOX_SIZE/2);
+            pg.rect(textX+2, yp+6, CHECKBOX_SIZE/2 - .5f, CHECKBOX_SIZE/2 - .5f);
           }
           textX += CHECKBOX_SIZE + 4;
         }
