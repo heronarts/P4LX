@@ -360,8 +360,8 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
   private static final float MAX_PHI = PConstants.HALF_PI * .9f;
 
-  private final int x;
-  private final int y;
+  private int x;
+  private int y;
   private PGraphics pg;
 
   private int backgroundColor = 0;
@@ -497,6 +497,32 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
   public PGraphics getGraphics() {
     return this.pg;
+  }
+
+  public UI3dContext setX(float x) {
+    this.x = (int) x;
+    return this;
+  }
+
+  public UI3dContext setY(float y) {
+    this.y = (int) y;
+    return this;
+  }
+
+  @Override
+  protected boolean contains(float x, float y) {
+    if (this.pg != null) {
+      return
+        (x >= this.x && x < (this.x + this.pg.width)) &&
+        (y >= this.y && y < (this.y + this.pg.height));
+    }
+    return super.contains(x, y);
+  }
+
+  public UI3dContext setPosition(float x, float y) {
+    setX(x);
+    setY(y);
+    return this;
   }
 
   @Override

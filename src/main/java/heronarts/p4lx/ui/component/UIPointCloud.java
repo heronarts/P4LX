@@ -49,6 +49,8 @@ public class UIPointCloud extends UI3dComponent implements LXSerializable {
 
   protected float[] pointSizeAttenuation = null;
 
+  private boolean auxiliary = false;
+
   /**
    * Point cloud for everything in the LX instance
    *
@@ -66,6 +68,11 @@ public class UIPointCloud extends UI3dComponent implements LXSerializable {
    */
   public UIPointCloud setPointSize(float pointSize) {
     this.pointSize.setValue(pointSize);
+    return this;
+  }
+
+  public UIPointCloud setAuxiliary(boolean auxiliary) {
+    this.auxiliary = auxiliary;
     return this;
   }
 
@@ -100,7 +107,7 @@ public class UIPointCloud extends UI3dComponent implements LXSerializable {
   @Override
   protected void onDraw(UI ui, PGraphics pg) {
     LXEngine.Frame frame = this.lx.getUIFrame();
-    int[] colors = frame.getColors();
+    int[] colors = this.auxiliary ? frame.getAuxColors() : frame.getColors();
     pg.noFill();
     pg.strokeWeight(this.pointSize.getValuef());
     pg.beginShape(PConstants.POINTS);
