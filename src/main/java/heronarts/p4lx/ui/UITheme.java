@@ -53,6 +53,7 @@ public class UITheme {
   private int primaryColor = 0xff669966;
   private int secondaryColor = 0xff666699;
   private int attentionColor = 0xffff3333;
+  private int auxColor = 0xff666699;
   private int surfaceColor = 0xff669999;
   private int recordingColor = 0xffa00044;
   private int cursorColor = 0xff555555;
@@ -434,6 +435,25 @@ public class UITheme {
     return this;
   }
 
+  /**
+   * Gets aux color
+   *
+   * @return Aux color
+   */
+  public int getAuxColor() {
+    return this.auxColor;
+  }
+
+  /**
+   * Sets aux color
+   *
+   * @param color Color
+   * @return this
+   */
+  public UITheme setAuxColor(int color) {
+    this.auxColor = color;
+    return this;
+  }
 
   /**
    * Gets highlight color
