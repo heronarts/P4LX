@@ -148,7 +148,7 @@ public class UIGLPointCloud extends UIPointCloud {
   @Override
   protected void onDraw(UI ui, PGraphics pg) {
     LXEngine.Frame frame = this.lx.getUIFrame();
-    int[] colors = frame.getColors();
+    int[] colors = this.auxiliary ? frame.getAuxColors() : frame.getColors();
     LXModel frameModel = frame.getModel();
     int frameModelGeneration = frameModel.getGeneration();
 

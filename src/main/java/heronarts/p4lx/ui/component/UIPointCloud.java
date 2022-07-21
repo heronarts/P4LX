@@ -49,7 +49,7 @@ public class UIPointCloud extends UI3dComponent implements LXSerializable {
 
   protected float[] pointSizeAttenuation = null;
 
-  private boolean auxiliary = false;
+  protected boolean auxiliary = false;
 
   /**
    * Point cloud for everything in the LX instance
