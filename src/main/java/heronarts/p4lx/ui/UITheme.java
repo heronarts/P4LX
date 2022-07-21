@@ -53,8 +53,9 @@ public class UITheme {
   private int primaryColor = 0xff669966;
   private int secondaryColor = 0xff666699;
   private int attentionColor = 0xffff3333;
-  private int auxColor = 0xff666699;
-  private int surfaceColor = 0xff669999;
+  private int cueColor = 0xff666699;
+  private int auxColor = 0xff996666;
+  private int surfaceColor = this.cueColor;
   private int recordingColor = 0xffa00044;
   private int cursorColor = 0xff555555;
   private int selectionColor = 0xff333333;
@@ -432,6 +433,26 @@ public class UITheme {
    */
   public UITheme setSurfaceColor(int color) {
     this.surfaceColor = color;
+    return this;
+  }
+
+  /**
+   * Gets cue color
+   *
+   * @return Cue color
+   */
+  public int getCueColor() {
+    return this.cueColor;
+  }
+
+  /**
+   * Sets cue color
+   *
+   * @param color Color
+   * @return this
+   */
+  public UITheme setCueColor(int color) {
+    this.cueColor = color;
     return this;
   }
 
