@@ -30,6 +30,7 @@ import heronarts.lx.clipboard.LXClipboardItem;
 import heronarts.lx.command.LXCommand;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -82,6 +83,30 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
   protected LX getLX() {
     return this.ui.lx;
+  }
+
+  /**
+   * Adds a parameter listener
+   *
+   * @param parameter Parameter to listen to
+   * @param listener Parameter listener
+   * @return this
+   */
+  public UIObject addListener(LXListenableParameter parameter, LXParameterListener listener) {
+    return addListener(parameter, listener, false);
+  }
+
+  /**
+   * Adds a parameter listener
+   *
+   * @param parameter Parameter to listen to
+   * @param listener Parameter listener
+   * @param fire Whether to fire listener immediately upon registration
+   * @return this
+   */
+  public UIObject addListener(LXListenableParameter parameter, LXParameterListener listener, boolean fire) {
+    parameter.addListener(listener, fire);
+    return this;
   }
 
   /**
