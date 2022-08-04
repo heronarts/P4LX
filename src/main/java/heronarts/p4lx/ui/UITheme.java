@@ -62,6 +62,8 @@ public class UITheme {
   private int focusSelectionColor = 0xff393939;
   private int errorColor = 0xffff0000;
 
+  private int secondaryListItemColor = 0xff666666;
+
   private int darkBackgroundColor = 0xff191919;
   private int darkFocusBackgroundColor = 0xff292929;
 
@@ -414,6 +416,15 @@ public class UITheme {
    */
   public int getErrorColor() {
     return this.errorColor;
+  }
+
+  /**
+   * Secondary list item selection color
+   *
+   * @return Color of secondary item selected in list
+   */
+  public int getSecondaryListItemColor() {
+    return this.secondaryListItemColor;
   }
 
   /**
