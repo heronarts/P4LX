@@ -136,7 +136,7 @@ public class UIColorPicker extends UI2dComponent {
       pg.rect(UIKnob.KNOB_MARGIN, 0, UIKnob.KNOB_SIZE, UIKnob.KNOB_SIZE);
       UIParameterControl.drawParameterLabel(ui, pg, this, (this.color != null) ? this.color.getLabel() : "-");
     } else {
-      pg.rect(0, 0, this.width, this.height);
+      pg.rect(0, 0, this.width, this.height, getBorderRounding());
     }
   }
 
