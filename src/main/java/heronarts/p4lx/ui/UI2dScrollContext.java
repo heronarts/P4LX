@@ -72,7 +72,7 @@ public class UI2dScrollContext extends UI2dContext {
    * @return this
    */
   public UI2dScrollContext setMaxWidth(float maxWidth, boolean reflow) {
-    this.dynamicWidth = true;
+    this.dynamicWidth = maxWidth > 0;
     this.maxWidth = maxWidth;
     if (reflow) {
       reflow();
@@ -102,7 +102,7 @@ public class UI2dScrollContext extends UI2dContext {
    * @return this
    */
   public UI2dScrollContext setMaxHeight(float maxHeight, boolean reflow) {
-    this.dynamicHeight = true;
+    this.dynamicHeight = maxHeight > 0;
     this.maxHeight = maxHeight;
     if (reflow) {
       reflow();
