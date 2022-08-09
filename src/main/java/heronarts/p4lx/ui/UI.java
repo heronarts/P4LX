@@ -305,6 +305,12 @@ public class UI implements LXEngine.Dispatch {
       setBackgroundColor(UI.BLACK);
     }
 
+    private void clearContent(UI2dComponent overlayContent) {
+      if (this.overlayContent == overlayContent) {
+        setContent(null);
+      }
+    }
+
     private void setContent(UI2dComponent overlayContent) {
       if (this.overlayContent != null) {
         this.overlayContent.setVisible(false);
@@ -822,6 +828,11 @@ public class UI implements LXEngine.Dispatch {
   public UI bringToTop(UI2dContext layer) {
     this.root.mutableChildren.remove(layer);
     this.root.mutableChildren.add(layer);
+    return this;
+  }
+
+  public UI clearContextOverlay(UI2dComponent contextOverlay) {
+    this.contextMenuOverlay.clearContent(contextOverlay);
     return this;
   }
 
