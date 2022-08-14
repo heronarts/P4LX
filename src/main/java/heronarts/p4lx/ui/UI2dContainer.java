@@ -208,7 +208,16 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
     return this;
   }
 
+  private boolean inReflow = false;
+
   protected void reflow() {
+    if (this.inReflow) {
+      // Prevent re-entrant reflow() calls, we're going to update the positions
+      // of many objects, we don't need them to re-notify us each time.
+      return;
+    }
+
+    this.inReflow = true;
     if (this.layout == Layout.VERTICAL) {
       float y = this.topPadding;
       for (UIObject child : this) {
@@ -268,6 +277,7 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
       }
       setContentHeight(Math.max(this.minHeight, y + h + this.bottomPadding));
     }
+    this.inReflow = false;
   }
 
   protected UI2dContainer setContentTarget(UI2dContainer contentTarget) {
