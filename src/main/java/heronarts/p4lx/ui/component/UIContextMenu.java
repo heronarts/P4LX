@@ -42,6 +42,9 @@ public class UIContextMenu extends UI2dComponent {
   private int highlight = -1;
   private float rowHeight = DEFAULT_ROW_HEIGHT;
   private float padding = 0;
+  private float maxScrollHeight = -1;
+  private float contentHeight = 0;
+  private float scrollHeight = -1;
 
   public UIContextMenu(float x, float y, float w, float h) {
     super(x, y, w, h);
@@ -50,10 +53,14 @@ public class UIContextMenu extends UI2dComponent {
     setBorderColor(UI.get().theme.getContextBorderColor());
   }
 
+  public float getPadding() {
+    return this.padding;
+  }
+
   public UIContextMenu setPadding(float padding) {
     if (this.padding != padding) {
       this.padding = padding;
-      updateHeight();
+      updateSize();
     }
     return this;
   }
@@ -61,19 +68,35 @@ public class UIContextMenu extends UI2dComponent {
   public UIContextMenu setRowHeight(float rowHeight) {
     if (this.rowHeight != rowHeight) {
       this.rowHeight = rowHeight;
-      updateHeight();
+      updateSize();
     }
+    return this;
+  }
+
+  public UIContextMenu setMaxHeight(float maxHeight) {
+    this.maxScrollHeight = maxHeight;
+    updateSize();
     return this;
   }
 
   public UIContextMenu setActions(UIContextActions.Action[] actions) {
     this.actions = actions;
-    updateHeight();
+    updateSize();
     return this;
   }
 
-  private void updateHeight() {
-    setHeight(this.actions.length * this.rowHeight + 2 * this.padding + 2);
+  private void updateSize() {
+    this.contentHeight = this.actions.length * this.rowHeight + 2 * this.padding + 2;
+    setHeight(this.contentHeight);
+    if ((this.maxScrollHeight > 0) && (this.contentHeight > this.maxScrollHeight)) {
+      this.scrollHeight = this.maxScrollHeight;
+    } else {
+      this.scrollHeight = this.contentHeight;
+    }
+  }
+
+  public float getScrollHeight() {
+    return this.scrollHeight;
   }
 
   public UIContextMenu setHighlight(int highlight) {

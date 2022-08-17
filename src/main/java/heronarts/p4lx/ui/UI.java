@@ -38,6 +38,7 @@ import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p4lx.P4LX;
+import heronarts.p4lx.ui.component.UIContextMenu;
 import heronarts.p4lx.ui.component.UILabel;
 
 import java.io.File;
@@ -48,6 +49,7 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
+import processing.core.PGraphics;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -292,11 +294,13 @@ public class UI implements LXEngine.Dispatch {
 
   private UIEventHandler topLevelKeyEventHandler = null;
 
-  private class UIContextOverlay extends UI2dContext {
+  private class UIContextOverlay extends UI2dScrollContext {
 
     private boolean mousePressed = false;
 
     private UI2dComponent overlayContent = null;
+
+    private UIContextMenu contextMenu = null;
 
     public UIContextOverlay() {
       super(UI.this, 0, 0, 0, 0);
@@ -318,8 +322,20 @@ public class UI implements LXEngine.Dispatch {
         root.mutableChildren.remove(this);
       }
       this.overlayContent = overlayContent;
+      this.contextMenu = null;
       if (overlayContent != null) {
-        setSize(overlayContent.getWidth(), overlayContent.getHeight());
+        float contentWidth = overlayContent.getWidth();
+        float contentHeight = overlayContent.getHeight();
+        if (overlayContent instanceof UIContextMenu) {
+          this.contextMenu = (UIContextMenu) overlayContent;
+          float scrollHeight = contextMenu.getScrollHeight();
+          setSize(contentWidth, scrollHeight);
+          setScrollSize(contentWidth, contentHeight);
+        } else {
+          setScrollSize(contentWidth, contentHeight);
+          setSize(contentWidth, contentHeight);
+        }
+
         float x = 0;
         float y = 0;
         UIObject component = overlayContent;
@@ -327,9 +343,9 @@ public class UI implements LXEngine.Dispatch {
           x += component.getX();
           y += component.getY();
           if (component instanceof UI2dScrollContext) {
-            UI2dScrollContext scrollContext = (UI2dScrollContext) component;
-            x += scrollContext.getScrollX();
-            y += scrollContext.getScrollY();
+            UI2dScrollContext scrollInterface = (UI2dScrollContext) component;
+            x += scrollInterface.getScrollX();
+            y += scrollInterface.getScrollY();
           }
           component = component.getParent();
         }
@@ -338,6 +354,30 @@ public class UI implements LXEngine.Dispatch {
         overlayContent.setPosition(0, 0);
         overlayContent.addToContainer(this);
         root.mutableChildren.add(this);
+      }
+    }
+
+    @Override
+    public void drawBorder(UI ui, PGraphics pg) {
+      UIContextMenu contextMenu = this.contextMenu;
+      if (contextMenu != null) {
+        float padding = contextMenu.getPadding();
+        if (padding > 0) {
+          // Cap the top and bottom of the scroll zone
+          pg.noStroke();
+          pg.fill(ui.theme.getDeviceFocusedBackgroundColor());
+          pg.rect(padding, 0, this.width - 2*padding, padding);
+          pg.rect(padding, this.height-padding, this.width - 2*padding, padding);
+        }
+        if (contextMenu.hasBorder()) {
+          final float borderWeight = contextMenu.getBorderWeight();
+          final float halfBorderWeight = borderWeight * 0.5f;
+          pg.noFill();
+          pg.strokeWeight(borderWeight);
+          pg.stroke(contextMenu.getBorderColor());
+          pg.rect(halfBorderWeight, halfBorderWeight, this.width-borderWeight, this.height-borderWeight, contextMenu.getBorderRounding());
+          pg.strokeWeight(borderWeight);
+        }
       }
     }
 
