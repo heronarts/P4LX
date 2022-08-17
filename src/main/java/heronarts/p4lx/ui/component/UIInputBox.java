@@ -145,6 +145,13 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
 
   protected abstract void saveEditBuffer();
 
+  /**
+   * Subclasses may override to handle editing changes
+   *
+   * @param value New value being actively edited
+   */
+  protected /* abstract */ void onEditChange(String editBuffer) {}
+
   public boolean isEditable() {
     return this.editable;
   }
@@ -176,6 +183,10 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
   }
 
   public void edit() {
+    edit(getEditBufferValue());
+  }
+
+  public void edit(String editBufferValue) {
     if (!this.editable) {
       throw new IllegalStateException("May not edit a non-editable UIInputBox");
     }
@@ -294,6 +305,7 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
           if (!UIKeyEvent.isCommand(keyEvent)) {
             consumeKeyEvent();
             this.editBuffer += keyChar;
+            onEditChange(this.editBuffer);
             redraw();
           }
         } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
@@ -309,25 +321,32 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
             } else {
               this.editBuffer = this.editBuffer.substring(0, this.editBuffer.length() - 1);
             }
+            onEditChange(this.editBuffer);
             redraw();
           }
         } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
           consumeKeyEvent();
           this.editing = false;
+          onEditChange(getValueString());
           redraw();
         }
       } else if (this.enabled) {
         // Not editing
         if (this.immediateEdit && isValidCharacter(keyChar) && !UIKeyEvent.isCommand(keyEvent)) {
           consumeKeyEvent();
-          this.editing = true;
-          this.editBuffer = Character.toString(keyChar);
-          redraw();
+          edit(Character.toString(keyChar));
+          onEditChange(this.editBuffer);
+        } else if (this.immediateEdit && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+          String editBuffer = getEditBufferValue();
+          if (!editBuffer.isEmpty()) {
+            consumeKeyEvent();
+            edit(editBuffer.substring(0, editBuffer.length() - 1));
+            onEditChange(this.editBuffer);
+          }
         } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
           if (this.returnKeyEdit) {
             consumeKeyEvent();
             edit();
-            redraw();
           }
         } else if ((keyCode == java.awt.event.KeyEvent.VK_LEFT) || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
           decrementValue(keyEvent);

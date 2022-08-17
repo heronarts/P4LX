@@ -59,6 +59,16 @@ public interface UIItemList {
    */
   public static abstract class Item {
 
+    protected boolean hidden = false;
+
+    private boolean isVisible() {
+      if (this.hidden) {
+        return false;
+      }
+      Section section = getSection();
+      return (section == null) || section.expanded;
+    }
+
     /**
      * Whether this item is in a special active state
      *
@@ -241,6 +251,8 @@ public interface UIItemList {
 
     private int keyActivate = -1;
 
+    private String filter = null;
+
     private int controlSurfaceFocusIndex = -1;
     private int controlSurfaceFocusLength = -1;
     private int controlSurfaceFocusColor = -1;
@@ -269,8 +281,7 @@ public interface UIItemList {
     private void focusNext(int increment) {
       int index = this.focusIndex + increment;
       while (index >= 0 && index < this.items.size()) {
-        Section section = this.items.get(index).getSection();
-        if (section == null || section.expanded) {
+        if (this.items.get(index).isVisible()) {
           setFocusIndex(index);
           return;
         }
@@ -325,8 +336,7 @@ public interface UIItemList {
     private void recomputeContentHeight() {
       int itemCount = 0;
       for (Item item : this.items) {
-        Section section = item.getSection();
-        if (section == null || section.expanded) {
+        if (item.isVisible()) {
           ++itemCount;
         }
       }
@@ -462,6 +472,46 @@ public interface UIItemList {
       this.isReorderable = isReorderable;
     }
 
+    private void setFilter(String filter) {
+      if (filter != null) {
+        filter = filter.toLowerCase();
+      }
+      if (this.filter != filter) {
+        this.filter = filter;
+        boolean changed = false;
+        for (Item item : this.items) {
+          if (!(item instanceof Section)) {
+            boolean hidden = (filter != null) && !item.getLabel().toLowerCase().contains(filter);
+            if (hidden != item.hidden) {
+              item.hidden = hidden;
+              changed = true;
+            }
+          }
+        }
+        for (Item item : this.items) {
+          if (item instanceof Section) {
+            Section section = (Section) item;
+            boolean sectionHidden = true;
+            for (Item sectionItem : section.items) {
+              if (!sectionItem.hidden) {
+                sectionHidden = false;
+                break;
+              }
+            }
+            if (sectionHidden != section.hidden) {
+              section.hidden = sectionHidden;
+              changed = true;
+            }
+          }
+        }
+
+        if (changed) {
+          recomputeContentHeight();
+          this.list.redraw();
+        }
+      }
+    }
+
     private void setControlSurfaceFocus(int index, int length, int color) {
       this.controlSurfaceFocusIndex = index;
       this.controlSurfaceFocusLength = length;
@@ -539,17 +589,16 @@ public interface UIItemList {
 
     private int getVisibleFocusIndex() {
       int counter = 0;
-      int itemIndex = -1;
+      int visibleIndex = -1;
       for (Item item : this.items) {
-        Section section = item.getSection();
-        if (section == null || section.expanded) {
-          ++itemIndex;
+        if (item.isVisible()) {
+          ++visibleIndex;
         }
         if (counter++ >= this.focusIndex) {
           break;
         }
       }
-      return itemIndex;
+      return visibleIndex;
     }
 
     private void drawFocus(UI ui, PGraphics pg) {
@@ -583,8 +632,8 @@ public interface UIItemList {
         Section section = item.getSection();
         boolean isSection = item instanceof Section;
 
-        // Skip rendering items that are in a collapsed section
-        if (section != null && !section.expanded) {
+        // Skip rendering items that are invisible
+        if (!item.isVisible()) {
           ++i;
           continue;
         }
@@ -670,17 +719,17 @@ public interface UIItemList {
 
       int visibleIndex = (int) (my / (ROW_HEIGHT + ROW_MARGIN));
       int counter = 0;
-      int itemIndex = -1;
+      int itemIndex = 0;
+      int mouseIndex = -1;
       for (Item item : this.items) {
-        ++itemIndex;
-        Section section = item.getSection();
-        if (section == null || section.expanded) {
+        if (item.isVisible()) {
           if (counter++ >= visibleIndex) {
-            break;
+            mouseIndex = itemIndex;
           }
         }
+        ++itemIndex;
       }
-      return itemIndex;
+      return mouseIndex;
     }
 
     private void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
@@ -965,6 +1014,12 @@ public interface UIItemList {
     }
 
     @Override
+    public UIItemList setFilter(String filter) {
+      this.impl.setFilter(filter);
+      return this;
+    }
+
+    @Override
     public UIItemList setControlSurfaceFocus(int index, int length, int color) {
       this.impl.setControlSurfaceFocus(index, length, color);
       return this;
@@ -1140,6 +1195,12 @@ public interface UIItemList {
     @Override
     public UIItemList setReorderable(boolean reorderable) {
       this.impl.setReorderable(reorderable);
+      return this;
+    }
+
+    @Override
+    public UIItemList setFilter(String filter) {
+      this.impl.setFilter(filter);
       return this;
     }
 
@@ -1349,6 +1410,15 @@ public interface UIItemList {
    * @return this
    */
   public UIItemList setReorderable(boolean reorderable);
+
+  /**
+   * Filter the items in the list by a String, resulting list will only
+   * show items that contains the filter string
+   *
+   * @param filter Filter string
+   * @return this
+   */
+  public UIItemList setFilter(String filter);
 
   /**
    * Sets a control focus range that is highlighted in the list
