@@ -725,6 +725,7 @@ public interface UIItemList {
         if (item.isVisible()) {
           if (counter++ >= visibleIndex) {
             mouseIndex = itemIndex;
+            break;
           }
         }
         ++itemIndex;
