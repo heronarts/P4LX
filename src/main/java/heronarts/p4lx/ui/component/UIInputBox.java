@@ -148,7 +148,7 @@ public abstract class UIInputBox extends UIParameterComponent implements UIFocus
   /**
    * Subclasses may override to handle editing changes
    *
-   * @param value New value being actively edited
+   * @param editBuffer New value being actively edited
    */
   protected /* abstract */ void onEditChange(String editBuffer) {}
 
