@@ -104,13 +104,13 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         float modStart, modEnd;
         switch (modulation.getPolarity()) {
         case BIPOLAR:
-          modStart = LXUtils.constrainf(baseEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
-          modEnd = LXUtils.constrainf(baseEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+          modStart = baseEnd - modulation.range.getValuef() * ARC_RANGE;
+          modEnd = baseEnd + modulation.range.getValuef() * ARC_RANGE;
           break;
         default:
         case UNIPOLAR:
           modStart = baseEnd;
-          modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+          modEnd = modStart + modulation.range.getValuef() * ARC_RANGE;
           break;
         }
 
@@ -122,22 +122,46 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
           modColor = modulationColor.getColor();
           modColorInv = LXColor.hsb(LXColor.h(modColor), 50, 75);
         }
-        pg.fill(modColor);
-        switch (modulation.getPolarity()) {
-        case BIPOLAR:
-          if (modEnd >= modStart) {
-            pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modEnd+.1f));
-            pg.fill(modColorInv);
-            pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), baseEnd);
-          } else {
-            pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), baseEnd);
-            pg.fill(modColorInv);
-            pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modStart+.1f));
+
+        boolean hasWrap = false;
+        float wrapStart = 0, wrapEnd = 0;
+        int wrapColor = modColor;
+
+        if (this.parameter.isWrappable()) {
+          if (modStart < ARC_START) {
+            hasWrap = true;
+            wrapStart = ARC_END;
+            wrapEnd = ARC_END + (modStart - ARC_START);
+            modStart = ARC_START;
+            wrapColor = modColorInv;
+          } else if (modStart > ARC_END) {
+            hasWrap = true;
+            wrapEnd = ARC_START;
+            wrapStart = ARC_START + (modStart - ARC_END);
+            modStart = ARC_END;
+            wrapColor = modColorInv;
           }
-          break;
-        case UNIPOLAR:
-          pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, Math.min(modStart, modEnd)-.1f), Math.min(ARC_END, Math.max(modStart, modEnd)+.1f));
-          break;
+          if (modEnd < ARC_START) {
+            hasWrap = true;
+            wrapStart = ARC_END;
+            wrapEnd = ARC_END + (modEnd - ARC_START);
+            modEnd = ARC_START;
+            wrapColor = modColor;
+          } else if (modEnd > ARC_END) {
+            hasWrap = true;
+            wrapEnd = ARC_START;
+            wrapStart = ARC_START + (modEnd - ARC_END);
+            modEnd = ARC_END;
+            wrapColor = modColor;
+          }
+        } else {
+          modStart = LXUtils.constrainf(modStart, ARC_START, ARC_END);
+          modEnd = LXUtils.constrainf(modEnd, ARC_START, ARC_END);
+        }
+
+        drawModArc(pg, modulation.getPolarity(), modStart, modEnd, baseEnd, arcSize, modColor, modColorInv);
+        if (hasWrap) {
+          drawModArc(pg, LXParameter.Polarity.UNIPOLAR, wrapStart, wrapEnd, baseEnd, arcSize, wrapColor, wrapColor);
         }
         arcSize -= 3;
         pg.fill(ui.theme.getDeviceBackgroundColor());
@@ -185,6 +209,26 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
     pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, 8, 8);
 
     super.onDraw(ui,  pg);
+  }
+
+  private void drawModArc(PGraphics pg, LXParameter.Polarity polarity, float modStart, float modEnd, float baseEnd, float arcSize, int modColor, int modColorInv) {
+    pg.fill(modColor);
+    switch (polarity) {
+    case BIPOLAR:
+      if (modEnd >= modStart) {
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modEnd+.1f));
+        pg.fill(modColorInv);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), baseEnd);
+      } else {
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), baseEnd);
+        pg.fill(modColorInv);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modStart+.1f));
+      }
+      break;
+    case UNIPOLAR:
+      pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, Math.min(modStart, modEnd)-.1f), Math.min(ARC_END, Math.max(modStart, modEnd)+.1f));
+      break;
+    }
   }
 
   private double dragValue;
