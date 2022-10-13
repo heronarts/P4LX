@@ -23,6 +23,6 @@
  */
 
 /**
- * Framework for embedding LX in Processing 3.
+ * Framework for embedding LX in Processing 4.
  */
 package heronarts.p4lx;

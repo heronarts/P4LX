@@ -23,6 +23,6 @@
  */
 
 /**
- * Framework for building modular 3d+2d UI in Processing 2.
+ * Framework for building modular 3d+2d UI in Processing 4.
  */
 package heronarts.p4lx.ui;
