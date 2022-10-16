@@ -248,7 +248,7 @@ public class P4LX extends LX {
   }
 
   @Override
-  public <T extends LXComponent> T instantiateComponent(Class<? extends T> cls, Class<T> type) {
+  public <T extends LXComponent> T instantiateComponent(Class<? extends T> cls, Class<T> type) throws InstantiationException {
     try {
       try {
         return cls.getConstructor(LX.class).newInstance(this);
@@ -265,8 +265,8 @@ public class P4LX extends LX {
       }
     } catch (Exception x) {
       error(x, "Component instantiation failed: " + x.getLocalizedMessage());
+      throw new InstantiationException(x, cls.getSimpleName() + " could not be loaded. Check that all required content files are present and constructor is public.");
     }
-    return null;
   }
 
   @Override
