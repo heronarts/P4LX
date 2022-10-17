@@ -44,7 +44,7 @@ public class UIPointCloud extends UI3dComponent implements LXSerializable {
 
   protected final P4LX lx;
 
-  public final BoundedParameter pointSize = new BoundedParameter("Point Size", 2, 1, 10)
+  public final BoundedParameter pointSize = new BoundedParameter("Point Size", 2, 1, 101)
   .setDescription("Size of points in the UI");
 
   protected float[] pointSizeAttenuation = null;
