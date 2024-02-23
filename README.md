@@ -1,9 +1,7 @@
 END OF LIFECYCLE NOTICE
 ===
 
-Development of P4LX has been retired in favor of [GLX](https://github.com/heronarts/GLX), a replacement library that uses [LWJGL3](https://github.com/lwjgl) and [bgfx](https://github.com/bkaradzic/bgfx/) in place of the Processing runtime.
-
-The flagship [LX](https://github.com/heronarts/LX) GUI application is now [Chromatik](https://chromatik.co/).
+Development of P4LX has been retired in favor of [GLX](https://github.com/heronarts/GLX), a replacement library that uses [LWJGL3](https://github.com/lwjgl) and [bgfx](https://github.com/bkaradzic/bgfx/) in place of the Processing runtime. The flagship GUI application for [LX](https://github.com/heronarts/LX) is now the [Chromatik](https://chromatik.co/) Digital Lighting Workstation.
 
 ---
 
