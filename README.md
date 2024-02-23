@@ -1,3 +1,11 @@
+### END OF LIFECYCLE NOTICE ###
+
+Development of P4LX has been retired in favor of [GLX](https://github.com/heronarts/GLX), a replacement library that uses [LWJGL3](https://github.com/lwjgl) and [bgfx](https://github.com/bkaradzic/bgfx/) in place of the Processing runtime.
+
+The flagship [LX](https://github.com/heronarts/LX) GUI application is now [Chromatik](https://chromatik.co/).
+
+---
+
 **BY DOWNLOADING OR USING THE LX SOFTWARE OR ANY PART THEREOF, YOU AGREE TO THE TERMS AND CONDITIONS OF THE [LX STUDIO SOFTWARE LICENSE AND DISTRIBUTION AGREEMENT](http://lx.studio/license).**
 
 Please note that LX is not open-source software. The license grants permission to use this software freely in non-commercial applications. Commercial use is subject to a total annual revenue limit of $25K on any and all projects associated with the software. If this licensing is obstructive to your needs or you are unclear as to whether your desired use case is compliant, contact me to discuss proprietary licensing: mark@heronarts.com
@@ -6,9 +14,9 @@ Please note that LX is not open-source software. The license grants permission t
 
 ### P4LX Overview ###
 
-P4LX is a Processing 4 wrapper library for the [LX](https://github.com/heronarts/LX) lighting engine and the basis of the [LX Studio](http://lx.studio/) application. It allows you to simply embed LX inside a Processing sketch with a rich UI library that makes it easy and painless to render 3D simulations alongside versatile 2D controls.
+P4LX is a Processing 4 wrapper library for the [LX](https://github.com/heronarts/LX) lighting engine and the basis of the legacy [LX Studio](http://lx.studio/) application. It allows you to simply embed LX inside a Processing sketch with a rich UI library that makes it easy and painless to render 3D simulations alongside versatile 2D controls.
 
-Directly working with the P4LX library is only recommended for advanced users of LX. The easiest way to start an LX project is to clone or fork the [LXStudio](https://github.com/heronarts/LXStudio) repository and use that as the basis for your project.
+This development branch has now been abandoned in favor of [GLX](https://github.com/heronarts/GLX), which powers the [Chromatik](https://chromatik.co/) Digital Lighting Workstation application.
 
 ### Development Environment ###
 
