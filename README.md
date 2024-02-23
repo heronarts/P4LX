@@ -1,4 +1,5 @@
-### END OF LIFECYCLE NOTICE ###
+END OF LIFECYCLE NOTICE
+===
 
 Development of P4LX has been retired in favor of [GLX](https://github.com/heronarts/GLX), a replacement library that uses [LWJGL3](https://github.com/lwjgl) and [bgfx](https://github.com/bkaradzic/bgfx/) in place of the Processing runtime.
 
